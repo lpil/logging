@@ -33,3 +33,15 @@ pub fn log(level: LogLevel, message: String) -> Nil {
 
 @external(erlang, "logger", "log")
 fn erlang_log(level: LogLevel, message: String) -> DoNotLeak
+
+@external(erlang, "logger", "set_primary_config")
+fn set_primary_config_level(key: Key, level: LogLevel) -> Nil
+
+pub fn set_level(level: LogLevel) -> Nil {
+  set_primary_config_level(Level, level)
+  Nil
+}
+
+type Key {
+  Level
+}
