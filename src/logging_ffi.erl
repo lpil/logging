@@ -2,7 +2,7 @@
 -export([configure/0, format/2]).
 
 configure() ->
-    ok = logger:update_primary_config(#{
+    logger:update_primary_config(#{
         level => info,
         filter_default => log,
         filters => [
@@ -11,7 +11,7 @@ configure() ->
         ],
         metadata => #{}
     }),
-    ok = logger:update_handler_config(default, #{
+    logger:update_handler_config(default, #{
         formatter => {logging_ffi, []}
     }),
     nil.
