@@ -1,6 +1,6 @@
-import logging.{Alert, Critical, Debug, Emergency, Error, Info, Notice, Warning}
 import gleeunit
 import gleeunit/should
+import logging.{Alert, Critical, Debug, Emergency, Error, Info, Notice, Warning}
 
 pub fn main() {
   logging.configure()
@@ -11,6 +11,8 @@ pub fn main() {
   logging.log(Warning, "Hello!")
   logging.log(Notice, "Hello!")
   logging.log(Info, "Hello!")
+  logging.log(Debug, "Bye!")
+  logging.set_level(Debug)
   logging.log(Debug, "Hello!")
   gleeunit.main()
 }
