@@ -1,3 +1,5 @@
+import gleam/dynamic
+
 pub type LogLevel {
   Emergency
   Alert
@@ -35,13 +37,15 @@ pub fn log(level: LogLevel, message: String) -> Nil {
 fn erlang_log(level: LogLevel, message: String) -> DoNotLeak
 
 @external(erlang, "logger", "set_primary_config")
-fn set_primary_config_level(key: Key, level: LogLevel) -> Nil
+fn set_primary_config_level(
+  key: Key,
+  level: LogLevel,
+) -> Result(Nil, dynamic.Dynamic)
 
 /// Change the log visibility level to be output from the default of `Info`.
 ///
-pub fn set_level(level: LogLevel) -> Nil {
+pub fn set_level(level: LogLevel) -> Result(Nil, dynamic.Dynamic) {
   set_primary_config_level(Level, level)
-  Nil
 }
 
 type Key {
