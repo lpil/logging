@@ -36,7 +36,7 @@ pub fn log(level: LogLevel, message: String) -> Nil {
 @external(erlang, "logger", "log")
 fn erlang_log(level: LogLevel, message: String) -> DoNotLeak
 
-@external(erlang, "logger", "set_primary_config")
+@external(erlang, "logging_ffi", "set_primary_config")
 fn set_primary_config_level(
   key: Key,
   level: LogLevel,
