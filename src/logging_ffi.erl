@@ -1,5 +1,5 @@
 -module(logging_ffi).
--export([configure/0, format/2, set_primary_config/2]).
+-export([configure/0, format/2]).
 
 configure() ->
     logger:update_primary_config(#{
@@ -61,10 +61,4 @@ format_kv(Pairs) ->
             | format_kv(Rest)
         ];
         Other -> gleam@string:inspect(Other)
-    end.
-
-set_primary_config(Key, Level) ->
-    case logger:set_primary_config(Key, Level) of
-        ok -> {ok, nil};
-        {error, Reason} -> {error, Reason}
     end.
