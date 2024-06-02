@@ -35,9 +35,9 @@ pub fn log(level: LogLevel, message: String) -> Nil {
 fn erlang_log(level: LogLevel, message: String) -> DoNotLeak
 
 @external(erlang, "logger", "set_primary_config")
-fn set_primary_config_level(key: Key, level: LogLevel) -> Nil
+fn set_primary_config_level(key: Key, level: LogLevel) -> DoNotLeak
 
-/// Change the log visibility level to be output from the default of `Info`.
+/// Change the log visibility level to be output.
 ///
 pub fn set_level(level: LogLevel) -> Nil {
   set_primary_config_level(Level, level)
