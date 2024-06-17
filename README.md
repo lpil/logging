@@ -8,6 +8,7 @@ Configuration for the Erlang logger.
 ```sh
 gleam add logging
 ```
+
 ```gleam
 import logging.{Info}
 
@@ -19,5 +20,12 @@ pub fn main() {
   logging.log(Info, "Hello, Joe!")
 }
 ```
+
+## Disabling the colored output
+
+When using some logger services, colored output can be superfluous, because
+they're not processed at all, and appears as real characters. You can set
+the `NO_COLOR` to `true` or `True` in your environment to disable the colored
+output from the logger.
 
 Further documentation can be found at <https://hexdocs.pm/logging>.
