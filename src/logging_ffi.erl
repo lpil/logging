@@ -23,16 +23,21 @@ format(#{level := Level, msg := Msg, meta := _Meta}) ->
     [format_level(Level), format_msg(Msg), $\n].
 
 format_level(Level) ->
-    case Level of
-        emergency -> "\x1b[1;41mEMRG\x1b[0m";
-        alert -> "\x1b[1;41mALRT\x1b[0m";
-        critical -> "\x1b[1;41mCRIT\x1b[0m";
-        error -> "\x1b[1;31mEROR\x1b[0m";
-        warning -> "\x1b[1;33mWARN\x1b[0m";
-        notice -> "\x1b[1;32mNTCE\x1b[0m";
-        info -> "\x1b[1;34mINFO\x1b[0m";
-        debug -> "\x1b[1;36mDEBG\x1b[0m"
-    end.
+  {Msg, StartColor, EndColor} = case Level of
+      emergency -> {"EMRG", "\x1b[1;41m", "\x1b[0m"};
+      alert -> {"ALRT", "\x1b[1;41m", "\x1b[0m"};
+      critical -> {"CRIT", "\x1b[1;41m", "\x1b[0m"};
+      error -> {"EROR", "\x1b[1;31m", "\x1b[0m"};
+      warning -> {"WARN", "\x1b[1;33m", "\x1b[0m"};
+      notice -> {"NTCE", "\x1b[1;32m", "\x1b[0m"};
+      info -> {"INFO", "\x1b[1;34m", "\x1b[0m"};
+      debug -> {"DEBG", "\x1b[1;36m", "\x1b[0m"}
+  end,
+  case os:getenv("NO_COLOR") of
+    "true" -> Msg;
+    "True" -> Msg;
+    _ -> lists:concat([StartColor, Msg, EndColor])
+  end.
 
 format_msg(Report0) ->
     case Report0 of
@@ -53,11 +58,11 @@ format_kv(Pairs) ->
     case Pairs of
         [] -> [];
         [{K, V} | Rest] when is_atom(K) -> [
-            $\s, erlang:atom_to_binary(K), $=, gleam@string:inspect(V) 
+            $\s, erlang:atom_to_binary(K), $=, gleam@string:inspect(V)
             | format_kv(Rest)
         ];
         [{K, V} | Rest]  -> [
-            $\s, gleam@string:inspect(K), $=, gleam@string:inspect(V) 
+            $\s, gleam@string:inspect(K), $=, gleam@string:inspect(V)
             | format_kv(Rest)
         ];
         Other -> gleam@string:inspect(Other)
