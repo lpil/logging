@@ -20,6 +20,7 @@ is_colored_output() ->
     case os:getenv("NO_COLOR") of
         false -> true;
         "false" -> true;
+        "" -> true;
         _ -> false
     end.
 

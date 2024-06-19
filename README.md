@@ -25,7 +25,7 @@ pub fn main() {
 
 When using some logger services, colored output can be superfluous, because
 they're not processed at all, and appears as real characters. You can set
-the `NO_COLOR` to any string that _is not_ `"false"` in your environment to
-disable the colored output from the logger.
+the `NO_COLOR` to any string that _is not_ `"false"` or the empty string in your
+environment to disable the colored output from the logger.
 
 Further documentation can be found at <https://hexdocs.pm/logging>.
