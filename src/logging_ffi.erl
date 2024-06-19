@@ -12,32 +12,39 @@ configure() ->
         metadata => #{}
     }),
     logger:update_handler_config(default, #{
-        formatter => {logging_ffi, []}
+        formatter => {logging_ffi, #{colored => is_colored_output()}}
     }),
     nil.
 
-format(Event, _Config) ->
-    format(Event).
+is_colored_output() ->
+    case os:getenv("NO_COLOR") of
+        false -> true;
+        "false" -> true;
+        _ -> false
+    end.
 
-format(#{level := Level, msg := Msg, meta := _Meta}) ->
-    [format_level(Level), format_msg(Msg), $\n].
+format(#{level := Level, msg := Msg, meta := _Meta}, Config) ->
+    [format_level(Level, Config), format_msg(Msg), $\n].
 
-format_level(Level) ->
-  {Msg, StartColor, EndColor} = case Level of
-      emergency -> {"EMRG", "\x1b[1;41m", "\x1b[0m"};
-      alert -> {"ALRT", "\x1b[1;41m", "\x1b[0m"};
-      critical -> {"CRIT", "\x1b[1;41m", "\x1b[0m"};
-      error -> {"EROR", "\x1b[1;31m", "\x1b[0m"};
-      warning -> {"WARN", "\x1b[1;33m", "\x1b[0m"};
-      notice -> {"NTCE", "\x1b[1;32m", "\x1b[0m"};
-      info -> {"INFO", "\x1b[1;34m", "\x1b[0m"};
-      debug -> {"DEBG", "\x1b[1;36m", "\x1b[0m"}
-  end,
-  case os:getenv("NO_COLOR") of
-    "true" -> Msg;
-    "True" -> Msg;
-    _ -> lists:concat([StartColor, Msg, EndColor])
-  end.
+format_level(Level, #{colored := Colored}) ->
+    case Level of
+        emergency when Colored -> "\x1b[1;41mEMRG\x1b[0m";
+        alert when Colored -> "\x1b[1;41mALRT\x1b[0m";
+        critical when Colored -> "\x1b[1;41mCRIT\x1b[0m";
+        error when Colored -> "\x1b[1;31mEROR\x1b[0m";
+        warning when Colored -> "\x1b[1;33mWARN\x1b[0m";
+        notice when Colored -> "\x1b[1;32mNTCE\x1b[0m";
+        info when Colored -> "\x1b[1;34mINFO\x1b[0m";
+        debug when Colored -> "\x1b[1;36mDEBG\x1b[0m";
+        emergency -> "EMRG";
+        alert -> "ALRT";
+        critical -> "CRIT";
+        error -> "EROR";
+        warning -> "WARN";
+        notice -> "NTCE";
+        info -> "INFO";
+        debug -> "DEBG"
+    end.
 
 format_msg(Report0) ->
     case Report0 of
