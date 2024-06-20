@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v1.2.0 - 2024-06-20
 
 - Add `set_level` function to allow configuring log visibility.
 
