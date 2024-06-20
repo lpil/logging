@@ -12,26 +12,39 @@ configure() ->
         metadata => #{}
     }),
     logger:update_handler_config(default, #{
-        formatter => {logging_ffi, []}
+        formatter => {logging_ffi, #{colored => is_colored_output()}}
     }),
     nil.
 
-format(Event, _Config) ->
-    format(Event).
+is_colored_output() ->
+    case os:getenv("NO_COLOR") of
+        false -> true;
+        "false" -> true;
+        "" -> true;
+        _ -> false
+    end.
 
-format(#{level := Level, msg := Msg, meta := _Meta}) ->
-    [format_level(Level), format_msg(Msg), $\n].
+format(#{level := Level, msg := Msg, meta := _Meta}, Config) ->
+    [format_level(Level, Config), format_msg(Msg), $\n].
 
-format_level(Level) ->
+format_level(Level, #{colored := Colored}) ->
     case Level of
-        emergency -> "\x1b[1;41mEMRG\x1b[0m";
-        alert -> "\x1b[1;41mALRT\x1b[0m";
-        critical -> "\x1b[1;41mCRIT\x1b[0m";
-        error -> "\x1b[1;31mEROR\x1b[0m";
-        warning -> "\x1b[1;33mWARN\x1b[0m";
-        notice -> "\x1b[1;32mNTCE\x1b[0m";
-        info -> "\x1b[1;34mINFO\x1b[0m";
-        debug -> "\x1b[1;36mDEBG\x1b[0m"
+        emergency when Colored -> "\x1b[1;41mEMRG\x1b[0m";
+        alert when Colored -> "\x1b[1;41mALRT\x1b[0m";
+        critical when Colored -> "\x1b[1;41mCRIT\x1b[0m";
+        error when Colored -> "\x1b[1;31mEROR\x1b[0m";
+        warning when Colored -> "\x1b[1;33mWARN\x1b[0m";
+        notice when Colored -> "\x1b[1;32mNTCE\x1b[0m";
+        info when Colored -> "\x1b[1;34mINFO\x1b[0m";
+        debug when Colored -> "\x1b[1;36mDEBG\x1b[0m";
+        emergency -> "EMRG";
+        alert -> "ALRT";
+        critical -> "CRIT";
+        error -> "EROR";
+        warning -> "WARN";
+        notice -> "NTCE";
+        info -> "INFO";
+        debug -> "DEBG"
     end.
 
 format_msg(Report0) ->
@@ -53,11 +66,11 @@ format_kv(Pairs) ->
     case Pairs of
         [] -> [];
         [{K, V} | Rest] when is_atom(K) -> [
-            $\s, erlang:atom_to_binary(K), $=, gleam@string:inspect(V) 
+            $\s, erlang:atom_to_binary(K), $=, gleam@string:inspect(V)
             | format_kv(Rest)
         ];
         [{K, V} | Rest]  -> [
-            $\s, gleam@string:inspect(K), $=, gleam@string:inspect(V) 
+            $\s, gleam@string:inspect(K), $=, gleam@string:inspect(V)
             | format_kv(Rest)
         ];
         Other -> gleam@string:inspect(Other)
