@@ -6,7 +6,7 @@ Configuration for the Erlang logger.
 [![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/logging/)
 
 ```sh
-gleam add logging
+gleam add logging@1
 ```
 
 ```gleam
