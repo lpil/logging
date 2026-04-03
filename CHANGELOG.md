@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.4.0 - 2026-04-03
+
+- OTP logs are no longer excluded.
+
 ## v1.3.0 - 2024-07-15
 
 - The `NO_COLOUR` or `NO_COLOR` environment variable can now be used to disable

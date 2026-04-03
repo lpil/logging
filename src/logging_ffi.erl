@@ -6,7 +6,7 @@ configure() ->
         level => info,
         filter_default => log,
         filters => [
-            {domain,{fun logger_filters:domain/2, {stop, sub, [otp,sasl]}}},
+            {domain,{fun logger_filters:domain/2, {stop, sub, [sasl]}}},
             {domain,{fun logger_filters:domain/2, {stop, sub, [supervisor_report]}}}
         ],
         metadata => #{}
