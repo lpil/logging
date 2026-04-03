@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.5.0 - 2026-04-03
+
+- Progress logs are now excluded.
+
 ## v1.4.0 - 2026-04-03
 
 - OTP logs are no longer excluded.

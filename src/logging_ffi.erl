@@ -7,7 +7,8 @@ configure() ->
         filter_default => log,
         filters => [
             {domain,{fun logger_filters:domain/2, {stop, sub, [sasl]}}},
-            {domain,{fun logger_filters:domain/2, {stop, sub, [supervisor_report]}}}
+            {domain,{fun logger_filters:domain/2, {stop, sub, [supervisor_report]}}},
+            {progress, {fun logger_filters:progress/2, stop}}
         ],
         metadata => #{}
     }),
